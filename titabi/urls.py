@@ -22,6 +22,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('api/admin/', admin.site.urls),
 
+    path('api/artisans/', include('artisans.urls')),
+
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/auth/password/reset/', PasswordResetView.as_view(), name='password_reset'),
