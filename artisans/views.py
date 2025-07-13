@@ -6,12 +6,12 @@ from .serializers import ArtisanCategorySerializer, ArtisanProfileSerializer
 # Create your views here.
 
 class ArtisanCategoryListView(generics.ListAPIView):
-    queryset = ArtisanCategory.objects.all()
+    queryset = ArtisanCategory.objects.prefetch_related('skills').all()
     serializer_class = ArtisanCategorySerializer
     permission_classes = [permissions.AllowAny]
 
 
-class ArtisanProfileUpdateView(generics.RetrieveUpdateAPIView):
+class ArtisanProfileDetailUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = ArtisanProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 

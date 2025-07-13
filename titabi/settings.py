@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*', 'http://127.0.0.1:5500/']
 
@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
 
     "drf_yasg",
-    "artisan"
+
+    "accounts",
+    "artisans",
 ]
 
 SITE_ID = 1
@@ -193,4 +195,4 @@ SWAGGER_SETTINGS = {
     'SECURITY_REQUIREMENTS': [{'Bearer': []}]
 }
 
-AUTH_USER_MODEL = 'artisan.User'
+AUTH_USER_MODEL = 'accounts.User'
