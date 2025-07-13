@@ -28,6 +28,8 @@ urlpatterns = [
 
     path('api/accounts/', include('accounts.urls')),
 
+    path('api/ratings/', include('ratings.urls')),
+
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
     path('api/auth/password/reset/', PasswordResetView.as_view(), name='password_reset'),

@@ -71,12 +71,15 @@ class ArtisanProfilePublicSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
     skills = serializers.StringRelatedField(many=True)
     distance = serializers.SerializerMethodField()
+    rating = serializers.FloatField(read_only=True)
+    rating_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = ArtisanProfile
         fields = [
             'id', 'user', 'category', 'skills',
-            'experience_years', 'available', 'distance'
+            'experience_years', 'available', 'distance',
+            'rating', 'rating_count'
         ]
 
     def get_distance(self, obj):

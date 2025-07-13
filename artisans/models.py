@@ -26,7 +26,8 @@ class ArtisanProfile(models.Model):
     location = geomodels.PointField(geography=True, null=True, blank=True)
     available = models.BooleanField(default=True)
     experience_years = models.PositiveIntegerField(default=0)
-    rating = models.FloatField(default=5.0)
+    rating = models.FloatField(default=0.0)
+    rating_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.user.username} ({self.category.name if self.category else "Uncategorized"})'
