@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     "accounts",
     "artisans",
+    'jobs',
 ]
 
 SITE_ID = 1
@@ -143,18 +144,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ACCOUNT_LOGIN_METHODS  = {
-    'username': {'required': False},
-    'email': {'required': True},
-}
-# ACCOUNT_SIGNUP_FIELDS = {'email*', 'password1*', 'password2*'}
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SIGNUP_FIELDS = {
-    'username': {'required': False},
-    'email': {'required': True},
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer'
 }
 
+ACCOUNT_SIGNUP_FIELDS = ['phone_number', 'email', 'password1*', 'password2*']
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'phone_number'
+
 AUTHENTICATION_BACKENDS = (
+    'accounts.auth_backends.PhoneOrEmailBackend',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )

@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from accounts.serilizers import UserSerializer
 from .models import ArtisanCategory, ArtisanProfile, ArtisanSkill
 from django.contrib.gis.geos import Point
 
@@ -36,3 +38,5 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
         if lat and lon:
             instance.location = Point(lon, lat)
         return super().update(instance, validated_data)
+
+
