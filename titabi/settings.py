@@ -47,6 +47,8 @@ INSTALLED_APPS = [
 
     "drf_yasg",
 
+    "corsheaders",
+
     "accounts",
     "artisans",
     'jobs',
@@ -57,6 +59,7 @@ SITE_ID = 1
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -101,6 +104,19 @@ DATABASES = {
         'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",  # uses Docker service name
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 
 # Password validation
@@ -195,3 +211,20 @@ SWAGGER_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'accounts.User'
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://yourflutterapp.com",
+    "http://localhost:3000",  # if using web locally
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "origin",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+CORS_ALLOW_CREDENTIALS = True

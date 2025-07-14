@@ -10,6 +10,11 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
   web:
     build: .
     command: >
@@ -23,6 +28,7 @@ services:
       - .env
     depends_on:
       - db
+      - redis
 
 volumes:
   postgres_data:
