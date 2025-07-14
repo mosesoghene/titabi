@@ -212,3 +212,7 @@ Dockerfile
 docker-compose.yml
 pyproject.toml
 .python-version
+
+
+# IDEA
+.idea/
