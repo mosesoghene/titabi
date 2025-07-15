@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.gis',
+
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -45,9 +47,12 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
 
-    "drf_yasg",
+    # "drf_yasg",
 
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "corsheaders",
+
 
     "accounts",
     "artisans",
@@ -161,12 +166,28 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer'
+# REST_AUTH_REGISTER_SERIALIZERS = {
+#     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer'
+# }
+
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
 }
 
-ACCOUNT_SIGNUP_FIELDS = ['phone_number', 'email', 'password1*', 'password2*']
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'phone_number'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_SIGNUP_FIELDS = [
+    'phone_number',
+    'email',
+    'first_name',
+    'last_name',
+    'password1*',
+    'password2*',
+    'is_artisan'
+]
 
 AUTHENTICATION_BACKENDS = (
     'accounts.auth_backends.PhoneOrEmailBackend',
@@ -180,6 +201,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "titabi.schema.AppNameTagAutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Titabi API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 
@@ -193,8 +221,8 @@ REST_AUTH = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
 }
