@@ -67,7 +67,7 @@ class JobStatusUpdateSerializer(serializers.ModelSerializer):
 
 
 class ArtisanProfilePublicSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = serializers.SerializerMethodField()
     category = serializers.StringRelatedField()
     skills = serializers.StringRelatedField(many=True)
     distance = serializers.SerializerMethodField()
@@ -79,11 +79,19 @@ class ArtisanProfilePublicSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'category', 'skills',
             'experience_years', 'available', 'distance',
-            'rating', 'rating_count'
+            'rating', 'rating_count',
         ]
 
+    def get_user(self, obj):
+        u = obj.user
+        return {
+            'id': u.id,
+            'full_name': f"{u.first_name} {u.last_name}".strip() or None,
+            'email': u.email,
+            'phone_number': u.phone_number,
+        }
+
     def get_distance(self, obj):
-        if hasattr(obj, 'distance') and obj.distance:
-            return round(obj.distance.km, 2)
-        return None
+        return round(obj.distance.km, 2) if getattr(obj, 'distance', None) else None
+
 

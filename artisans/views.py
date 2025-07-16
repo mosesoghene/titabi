@@ -1,3 +1,4 @@
+from django.contrib.gis.db.models.functions import Distance
 from rest_framework.generics import ListAPIView
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
