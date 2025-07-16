@@ -1,15 +1,17 @@
 from rest_framework import serializers
 from django.contrib.gis.geos.point import Point
 
-from accounts.serilizers import UserSerializer
+from accounts.serilizers import UserSerializer, PublicUserSerializer
 from artisans.models import ArtisanProfile
 from artisans.serializers import ArtisanProfileSerializer
 from .models import JobRequest
 
 
 class JobRequestSerializer(serializers.ModelSerializer):
-    latitude = serializers.FloatField(write_only=True)
-    longitude = serializers.FloatField(write_only=True)
+    created_by = PublicUserSerializer(read_only=True)
+    artisan = PublicUserSerializer(source='artisan.user', read_only=True)
+    latitude = serializers.SerializerMethodField()
+    longitude = serializers.SerializerMethodField()
     target_artisan_id = serializers.IntegerField(required=False, write_only=True)
 
     target_artisan = ArtisanProfileSerializer(read_only=True)
@@ -17,10 +19,9 @@ class JobRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobRequest
         fields = [
-            'id', 'category', 'description',
-            'latitude', 'longitude',
-            'target_artisan_id', 'target_artisan',
-            'status', 'created_at', 'updated_at'
+            'id', 'created_by', 'artisan',
+            'target_artisan', 'target_artisan_id', 'category', 'description',
+            'status', 'latitude', 'longitude',
         ]
         read_only_fields = ['status', 'created_at', 'updated_at', 'target_artisan']
 
@@ -28,6 +29,12 @@ class JobRequestSerializer(serializers.ModelSerializer):
         if not ArtisanProfile.objects.filter(id=value).exists():
             raise serializers.ValidationError("Target artisan does not exist.")
         return value
+
+    def get_latitude(self, obj):
+        return obj.location.y if obj.location else None
+
+    def get_longitude(self, obj):
+        return obj.location.x if obj.location else None
 
     def create(self, validated_data):
         from django.contrib.gis.geos import Point
@@ -67,7 +74,7 @@ class JobStatusUpdateSerializer(serializers.ModelSerializer):
 
 
 class ArtisanProfilePublicSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    user = PublicUserSerializer(read_only=True)
     category = serializers.StringRelatedField()
     skills = serializers.StringRelatedField(many=True)
     distance = serializers.SerializerMethodField()

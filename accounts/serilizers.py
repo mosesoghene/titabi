@@ -114,3 +114,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'phone_number', 'email']
+
+
+class PublicUserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'full_name', 'email', 'phone_number']
+
+    def get_full_name(self, user):
+        return f"{user.first_name} {user.last_name}".strip()
+

@@ -30,4 +30,4 @@ class ArtisanProfile(models.Model):
     rating_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return f'{self.user.username} ({self.category.name if self.category else "Uncategorized"})'
+        return f'{self.user.id} {self.user.first_name} {self.user.last_name} ({self.category.name if self.category else "Uncategorized"})'

@@ -222,3 +222,9 @@ class SuggestArtisanView(APIView):
         job.save()
 
         return Response({'detail': 'Artisan suggested successfully.'}, status=200)
+
+
+class JobRequestDetailView(generics.RetrieveAPIView):
+    queryset = JobRequest.objects.all()
+    serializer_class = JobRequestSerializer
+    permission_classes = [IsAuthenticated]

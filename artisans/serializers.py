@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from accounts.serilizers import UserSerializer
+from accounts.serilizers import UserSerializer, PublicUserSerializer
 from .models import ArtisanCategory, ArtisanProfile, ArtisanSkill
 from django.contrib.gis.geos import Point
 
@@ -18,7 +18,7 @@ class ArtisanCategorySerializer(serializers.ModelSerializer):
 
 
 class ArtisanProfileSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    user = PublicUserSerializer(read_only=True)
     category = serializers.PrimaryKeyRelatedField(
         queryset=ArtisanProfile._meta.get_field('category').related_model.objects.all()
     )
