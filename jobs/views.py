@@ -113,17 +113,24 @@ class NearbyJobsView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         profile = getattr(user, 'artisanprofile', None)
-
         if not user.is_artisan or not profile:
             return JobRequest.objects.none()
 
-        lat = float(self.request.query_params.get('lat', profile.location.y))
-        lon = float(self.request.query_params.get('lon', profile.location.x))
-        radius = float(self.request.query_params.get('radius', 10))
+        lat_q = self.request.query_params.get('lat')
+        lon_q = self.request.query_params.get('lon')
 
+        if lat_q and lon_q:
+            lat = float(lat_q)
+            lon = float(lon_q)
+        elif profile.location:
+            lat = profile.location.y
+            lon = profile.location.x
+        else:
+            return JobRequest.objects.none()
+
+        radius = float(self.request.query_params.get('radius', 10))
         point = Point(lon, lat)
 
-        # Public jobs nearby (excluding self-posted)
         public_jobs = JobRequest.objects.filter(
             artisan__isnull=True,
             category=profile.category,
@@ -131,7 +138,6 @@ class NearbyJobsView(ListAPIView):
             status='pending'
         ).exclude(created_by=user)
 
-        # Private jobs targeted at this artisan
         direct_jobs = JobRequest.objects.filter(
             artisan__isnull=True,
             status='pending',
