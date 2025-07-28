@@ -10,9 +10,14 @@ from .models import JobRequest
 class JobRequestSerializer(serializers.ModelSerializer):
     created_by = PublicUserSerializer(read_only=True)
     artisan = PublicUserSerializer(source='artisan.user', read_only=True)
-    latitude = serializers.SerializerMethodField(write_only=True)
-    longitude = serializers.SerializerMethodField(write_only=True)
     target_artisan_id = serializers.IntegerField(required=False, write_only=True)
+
+    # Read-only output of location
+    latitude = serializers.SerializerMethodField()
+    longitude = serializers.SerializerMethodField()
+    # Accept input
+    lat = serializers.FloatField(write_only=True, required=True)
+    lon = serializers.FloatField(write_only=True, required=True)
 
     target_artisan = ArtisanProfileSerializer(read_only=True)
 
@@ -21,9 +26,12 @@ class JobRequestSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'created_by', 'artisan',
             'target_artisan', 'target_artisan_id', 'category', 'description',
-            'status', 'latitude', 'longitude',
+            'status', 'lat', 'lon', 'latitude', 'longitude',
         ]
-        read_only_fields = ['status', 'created_at', 'updated_at', 'target_artisan']
+        read_only_fields = [
+            'status', 'created_at', 'updated_at',
+            'target_artisan', 'latitude', 'longitude'
+        ]
 
     def validate_target_artisan_id(self, value):
         if not ArtisanProfile.objects.filter(id=value).exists():
