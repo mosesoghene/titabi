@@ -4,7 +4,7 @@ from accounts.serilizers import UserSerializer
 from .models import JobRequest
 
 # Register your models here.
-@admin.register(JobRequest, UserSerializer)
+@admin.register(JobRequest)
 class JobAdmin(admin.ModelAdmin):
     fieldsets = (
         'created_by', 'artisan', 'category',
