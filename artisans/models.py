@@ -28,6 +28,7 @@ class ArtisanProfile(models.Model):
     experience_years = models.PositiveIntegerField(default=0)
     rating = models.FloatField(default=0.0)
     rating_count = models.PositiveIntegerField(default=0)
+    artisan_address = models.TextField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f'{self.user.id} {self.user.first_name} {self.user.last_name} ({self.category.name if self.category else "Uncategorized"})'

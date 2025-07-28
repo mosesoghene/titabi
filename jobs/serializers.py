@@ -94,7 +94,7 @@ class ArtisanProfilePublicSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'category', 'skills',
             'experience_years', 'available', 'distance',
-            'rating', 'rating_count',
+            'rating', 'rating_count', 'artisan_address'
         ]
 
     def get_user(self, obj):

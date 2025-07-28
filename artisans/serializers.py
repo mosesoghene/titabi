@@ -30,8 +30,8 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(write_only=True, required=False)
     longitude = serializers.FloatField(write_only=True, required=False)
 
-    latitude_read = serializers.SerializerMethodField()
-    longitude_read = serializers.SerializerMethodField()
+    lat = serializers.SerializerMethodField()
+    lon = serializers.SerializerMethodField()
 
 
 
@@ -42,13 +42,13 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
             'skills', 'skill_names',
             'available', 'experience_years',
             'latitude', 'longitude',
-            'latitude_read', 'longitude_read',
+            'lat', 'lon', 'artisan_address',
         ]
 
-    def get_latitude_read(self, obj):
+    def get_lat(self, obj):
         return obj.location.y if obj.location else None
 
-    def get_longitude_read(self, obj):
+    def get_lon(self, obj):
         return obj.location.x if obj.location else None
 
     def get_user(self, obj):
@@ -70,6 +70,7 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         lat = validated_data.pop('latitude', None)
         lon = validated_data.pop('longitude', None)
+        instance.artisan_address = validated_data.get('artisan_address', instance.artisan_address)
         skill_names = validated_data.pop('skills', [])
 
         if lat is not None and lon is not None:
@@ -92,4 +93,6 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
             instance.skills.set(new_skills)
 
         return instance
+
+
 
