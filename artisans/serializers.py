@@ -30,8 +30,8 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(write_only=True, required=False)
     longitude = serializers.FloatField(write_only=True, required=False)
 
-    latitude_read = serializers.SerializerMethodField(method_name='get_latitude_read')
-    longitude_read = serializers.SerializerMethodField(method_name='get_longitude_read')
+    latitude_read = serializers.SerializerMethodField()
+    longitude_read = serializers.SerializerMethodField()
 
 
 
@@ -45,11 +45,11 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
             'latitude_read', 'longitude_read',
         ]
 
-    def get_latitude_read(self):
-        return float(self.data['latitude'])
+    def get_latitude_read(self, obj):
+        return obj.location.y if obj.location else None
 
-    def get_longitude_read(self):
-        return float(self.data['longitude'])
+    def get_longitude_read(self, obj):
+        return obj.location.x if obj.location else None
 
     def get_user(self, obj):
         u = obj.user
