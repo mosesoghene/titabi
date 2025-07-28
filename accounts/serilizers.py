@@ -104,16 +104,21 @@ class ChooseRoleSerializer(serializers.Serializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['phone_number', 'email', 'is_artisan']
         read_only_fields = ['phone_number']
+        fields = ['id', 'full_name', 'first_name', 'last_name', 'email', 'phone_number', 'is_artisan']
+
+    def get_full_name(self, user):
+        return f"{user.first_name} {user.last_name}".strip()
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'email']
+        fields = ['id', 'phone_number', 'email', 'is_artisan']
 
 
 class PublicUserSerializer(serializers.ModelSerializer):
@@ -121,7 +126,7 @@ class PublicUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'full_name', 'email', 'phone_number']
+        fields = ['id', 'full_name', 'email', 'phone_number', 'is_artisan']
 
     def get_full_name(self, user):
         return f"{user.first_name} {user.last_name}".strip()

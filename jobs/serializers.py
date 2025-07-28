@@ -10,8 +10,8 @@ from .models import JobRequest
 class JobRequestSerializer(serializers.ModelSerializer):
     created_by = PublicUserSerializer(read_only=True)
     artisan = PublicUserSerializer(source='artisan.user', read_only=True)
-    latitude = serializers.SerializerMethodField()
-    longitude = serializers.SerializerMethodField()
+    latitude = serializers.SerializerMethodField(read_only=False)
+    longitude = serializers.SerializerMethodField(read_only=False)
     target_artisan_id = serializers.IntegerField(required=False, write_only=True)
 
     target_artisan = ArtisanProfileSerializer(read_only=True)

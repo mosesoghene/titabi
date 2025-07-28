@@ -46,6 +46,7 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
             'full_name': f"{u.first_name} {u.last_name}".strip() or None,
             'email': u.email,
             'phone_number': u.phone_number,
+            'is_artisan': u.is_artisan,
         }
 
     def get_category_name(self, obj):
