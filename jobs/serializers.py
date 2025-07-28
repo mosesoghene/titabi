@@ -47,8 +47,8 @@ class JobRequestSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         from django.contrib.gis.geos import Point
 
-        lat = validated_data.pop('latitude')
-        lon = validated_data.pop('longitude')
+        lat = validated_data.pop('lat')
+        lon = validated_data.pop('lon')
         validated_data['location'] = Point(lon, lat)
         validated_data['created_by'] = self.context['request'].user
 
