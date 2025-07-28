@@ -6,13 +6,7 @@ from .models import JobRequest
 # Register your models here.
 @admin.register(JobRequest)
 class JobAdmin(admin.ModelAdmin):
-    fieldsets = (
-        'created_by', 'artisan', 'category',
-        'description', 'location', 'status',
-        'created_at', 'updated_at', 'target_artisan'
-    )
-
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('id', 'created_at', 'updated_at')
     list_display = (
         'id', 'created_by', 'artisan', 'category',
         'description', 'location', 'status',
