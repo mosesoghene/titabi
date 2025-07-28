@@ -30,8 +30,8 @@ class ArtisanProfileSerializer(serializers.ModelSerializer):
     latitude = serializers.FloatField(write_only=True, required=False)
     longitude = serializers.FloatField(write_only=True, required=False)
 
-    latitude_read = serializers.SerializerMethodField()
-    longitude_read = serializers.SerializerMethodField()
+    latitude_read = serializers.SerializerMethodField(method_name='get_latitude_read')
+    longitude_read = serializers.SerializerMethodField(method_name='get_longitude_read')
 
 
 
